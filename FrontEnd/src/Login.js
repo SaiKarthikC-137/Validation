@@ -54,7 +54,6 @@ export default function Login() {
     const validateEmail=(email)=> {
         const emreg=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if(!emreg.test(email)) {
-            setStatus("Invalid Email");
             return false;
         }
         return true;
@@ -67,7 +66,13 @@ export default function Login() {
         axios.post('http://localhost:8080/login',{"email":input['email'],"password":input['password']})
         .then(res=> {
             if(res.data) {
-                navigate("/home");
+              localStorage.setItem("user",JSON.stringify(input))
+              axios.get('http://localhost:8080/getRole',{params: {email:input['email']}}).then(res=> {
+                if(res.data==="admin")
+                  navigate("/dashboard");
+                else
+                  navigate("/home");
+              });
             }
             else {
                 setStatus("Login Failed");
@@ -114,6 +119,9 @@ export default function Login() {
         />
         <span>Show password</span>
           {error.password && <span className='err'>{error.password}</span>}
+        </div>
+        <div>
+          {status}
         </div>
         <div className="d-grid gap-2 mt-3">
           <button type="submit" className="btn btn-primary" onClick={handleSubmit}>

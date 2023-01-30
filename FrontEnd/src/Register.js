@@ -9,7 +9,12 @@ export default function Register() {
     const [input,setInput]=useState({
         email:"",
         password:"",
-        confirmPassword:""
+        confirmPassword:"",
+        mobile:"",
+        username:"",
+        address:"",
+        role:"user",
+        activated:false
     })
     const [error,setError]=useState({
         email:"",
@@ -25,6 +30,7 @@ export default function Register() {
             ...prev,
             [name]: value
         }));
+        console.log(input);
         validateInput(e);
     }
     const validateInput = e => {
@@ -116,9 +122,9 @@ export default function Register() {
         axios.post('http://localhost:8080/finduser',{"email":input['email'],"password":input['password']})
         .then(res=> {
             if(!res.data) {
-                axios.post('http://localhost:8080/register',{"email":input['email'],"password":input['password']})
+                axios.post('http://localhost:8080/register',input)
                 .then(res=> {
-                navigate('/home')
+                navigate('/login')
                 });
             }
             else {
@@ -134,6 +140,36 @@ export default function Register() {
       <form className="Auth-form">
         <div className="Auth-form-content">
         <h3 className="Auth-form-title">Register</h3>
+        <div className="form-group mt-3">
+          <label>User name</label>
+          <input
+            type="text"
+            name="username"
+            className="form-control mt-1"
+            placeholder="Enter username"
+            onChange={onInputChange}
+          />
+        </div>
+        <div className="form-group mt-3">
+          <label>Mobile</label>
+          <input
+            type="text"
+            name="mobile"
+            className="form-control mt-1"
+            placeholder="Enter mobile"
+            onChange={onInputChange}
+          />
+        </div>
+        <div className="form-group mt-3">
+          <label>Address</label>
+          <input
+            type="text"
+            name="address"
+            className="form-control mt-1"
+            placeholder="Enter address"
+            onChange={onInputChange}
+          />
+        </div>
         <div className="form-group mt-3">
           <label>Email address</label>
           <input
