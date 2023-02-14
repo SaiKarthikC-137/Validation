@@ -118,19 +118,12 @@ export default function Register() {
         if(!validatePassword(input['password'])) {
             return;
         }
-        else {
-        axios.post('http://localhost:8080/finduser',{"email":input['email'],"password":input['password']})
-        .then(res=> {
-            if(!res.data) {
-                axios.post('http://localhost:8080/register',input)
-                .then(res=> {
-                navigate('/login')
-                });
-            }
-            else {
-                setStatus('User already exists')
-            }
-        });} 
+        axios.post('http://localhost:8080/register',input).then(res=>{
+          navigate('/login')
+        }).catch(err=>{
+          setStatus(err.response.data)
+          console.log(status);
+        })
     }
     const handleLogin=(e)=>{
         navigate('/login');
@@ -215,6 +208,7 @@ export default function Register() {
         <span>Show password</span><br />
           {error.confirmPassword && <span className='err'>{error.confirmPassword}</span>}
         </div>
+        {status && <span className='err'>{status}</span>}
         <div className="d-grid gap-2 mt-3">
           <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
             Register

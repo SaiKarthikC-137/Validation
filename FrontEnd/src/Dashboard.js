@@ -14,8 +14,8 @@ function Dashboard() {
         console.error(err);
       });
   }, [del]);
-  const handleActivation=(username)=>{
-    axios.get('http://localhost:8080/activate',{params:{"username":username}})
+  const handleActivation=(email)=>{
+    axios.get('http://localhost:8080/activate',{params:{"email":email}})
     .then(res=> {
       console.log(res.data);
       var button=document.getElementById('activationbtn');
@@ -56,7 +56,7 @@ function Dashboard() {
               <td>{user.role}</td>
               <td>
                     {user.activated == false ? (
-                      <button id='activationbtn' className="btn btn-success btn-sm" onClick={()=>{handleActivation(user.username)}}>Activate</button>
+                      <button id='activationbtn' className="btn btn-success btn-sm" onClick={()=>{handleActivation(user.email)}}>Activate</button>
                     ) : <button className="btn btn-danger btn-sm" onClick={()=>{handleDelete(user.email)}}>Delete</button>}
                   </td>
             </tr>
