@@ -16,7 +16,6 @@ export default function Home() {
     });
     const navigate=useNavigate();
     useEffect(() => {
-        console.log(localStorage.getItem("user"));
     axios.get('http://localhost:8080/getuserbyemail',{params:{email:JSON.parse(localStorage.getItem("user"))['email']}})
       .then(res => {
         console.log(res.data);

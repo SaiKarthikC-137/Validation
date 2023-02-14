@@ -104,7 +104,11 @@ public class UserController {
 	
 	@CrossOrigin
 	@PostMapping("/updateuser")
-	public ResponseEntity<?> updateUser(@RequestBody UserModel data) {
+	public ResponseEntity<?> updateUser(@RequestBody UserModel data) throws UserNotFoundException {
+		List<UserModel> users=userRepository.findByEmail(data.getEmail());
+		if(users.isEmpty()) {
+			throw new UserNotFoundException();
+		}
 		userRepository.updateAccount(data);
 		return new ResponseEntity<>(true,HttpStatus.OK);
 	}

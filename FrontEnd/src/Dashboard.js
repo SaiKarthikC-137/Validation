@@ -17,7 +17,6 @@ function Dashboard() {
   const handleActivation=(email)=>{
     axios.get('http://localhost:8080/activate',{params:{"email":email}})
     .then(res=> {
-      console.log(res.data);
       var button=document.getElementById('activationbtn');
       button.style.visibility="hidden";
     }).catch(err=> {
@@ -31,7 +30,6 @@ function Dashboard() {
       console.log(err)
     })
     setDel((del)=>del+1);
-    console.log(del);
   }
   const navigate=useNavigate();
     const handleLogout=(e)=>{

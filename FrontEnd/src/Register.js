@@ -30,7 +30,6 @@ export default function Register() {
             ...prev,
             [name]: value
         }));
-        console.log(input);
         validateInput(e);
     }
     const validateInput = e => {
@@ -122,7 +121,6 @@ export default function Register() {
           navigate('/login')
         }).catch(err=>{
           setStatus(err.response.data)
-          console.log(status);
         })
     }
     const handleLogin=(e)=>{
