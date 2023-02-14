@@ -20,11 +20,15 @@ function Dashboard() {
       console.log(res.data);
       var button=document.getElementById('activationbtn');
       button.style.visibility="hidden";
+    }).catch(err=> {
+      console.log(err);
     })
   }
   const handleDelete=(email)=> {
     axios.get('http://localhost:8080/delete',{params:{"email":email}}).then(res=>{
       console.log(res.data);
+    }).catch(err=>{
+      console.log(err)
     })
     setDel((del)=>del+1);
     console.log(del);

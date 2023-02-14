@@ -36,6 +36,8 @@ export default function Home() {
     const handleUpdate=(e)=>{
         axios.post('http://localhost:8080/updateuser',user).then(res=> {
             console.log(res);
+        }).catch(err=> {
+          console.log(err)
         })
     }
     const handleLogout=(e)=>{

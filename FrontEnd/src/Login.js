@@ -72,11 +72,15 @@ export default function Login() {
                   navigate("/dashboard");
                 else
                   navigate("/home");
+              }).catch(err=>{
+                console.log(err);
               });
             }
             else {
                 setStatus("Login Failed");
             }
+        }).catch(err=>{
+          console.log(err);
         });
     }
     const handleRegister=(e)=> {
