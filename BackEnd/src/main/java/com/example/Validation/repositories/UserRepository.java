@@ -21,12 +21,16 @@ public class UserRepository{
 	    return jdbcTemplate.query("SELECT * from user_model WHERE email=?",
 	        BeanPropertyRowMapper.newInstance(UserModel.class), email);
 	  }
+	public List<UserModel> findByUsername(String uname) {
+	    return jdbcTemplate.query("SELECT * from user_model WHERE username=?",
+	        BeanPropertyRowMapper.newInstance(UserModel.class), uname);
+	  }
 	public List<UserModel> findAll() {
 		return jdbcTemplate.query("SELECT * from user_model",
 		        BeanPropertyRowMapper.newInstance(UserModel.class));
 	}
-	public void activateAccount(String username) {
-		jdbcTemplate.update("UPDATE user_model SET activated = true WHERE username = ?",username);
+	public void activateAccount(String email) {
+		jdbcTemplate.update("UPDATE user_model SET activated = true WHERE email = ?",email);
 		
 	}
 	public void updateAccount(UserModel user) {
