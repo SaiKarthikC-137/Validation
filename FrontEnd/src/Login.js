@@ -65,22 +65,18 @@ export default function Login() {
         }
         axios.post('http://localhost:8080/login',{"email":input['email'],"password":input['password']})
         .then(res=> {
-            if(res.data) {
-              localStorage.setItem("user",JSON.stringify(input))
-              axios.get('http://localhost:8080/getRole',{params: {email:input['email']}}).then(res=> {
-                if(res.data==="admin")
-                  navigate("/dashboard");
-                else
-                  navigate("/home");
-              }).catch(err=>{
-                console.log(err);
-              });
-            }
-            else {
-                setStatus("Login Failed");
-            }
+            localStorage.setItem("user",JSON.stringify(input))
+            axios.get('http://localhost:8080/getRole',{params: {email:input['email']}}).then(res=> {
+              if(res.data==="admin")
+                navigate("/dashboard");
+              else
+                navigate("/home");
+            }).catch(err=>{
+              console.log(err);
+            });
         }).catch(err=>{
           console.log(err);
+          setStatus("Login Failed");
         });
     }
     const handleRegister=(e)=> {

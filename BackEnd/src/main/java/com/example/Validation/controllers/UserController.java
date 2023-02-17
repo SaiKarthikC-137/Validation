@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Validation.exceptions.DuplicateEmailException;
 import com.example.Validation.exceptions.DuplicateUsernameException;
 import com.example.Validation.exceptions.EmailValidationException;
+import com.example.Validation.exceptions.IncorrectPasswordException;
+import com.example.Validation.exceptions.UserNotActivatedException;
 import com.example.Validation.exceptions.UserNotFoundException;
 import com.example.Validation.models.UserModel;
 import com.example.Validation.repositories.UserRepository;
@@ -33,7 +35,7 @@ public class UserController {
 	}
 	@CrossOrigin
 	@PostMapping("/register")
-	public void registerUser(@RequestBody UserModel data) throws EmailValidationException, DuplicateEmailException, DuplicateUsernameException{
+	public ResponseEntity<?> registerUser(@RequestBody UserModel data) throws EmailValidationException, DuplicateEmailException, DuplicateUsernameException{
 		if(!validateEmail(data.getEmail()))
 			throw new EmailValidationException();
 		if(!userRepository.findByEmail(data.getEmail()).isEmpty())
@@ -41,6 +43,7 @@ public class UserController {
 		if(!userRepository.findByUsername(data.getUsername()).isEmpty())
 			throw new DuplicateUsernameException();
 		userRepository.save_user(data);
+		return new ResponseEntity<>(data,HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -76,7 +79,7 @@ public class UserController {
 			throw new UserNotFoundException();
 		}
 		userRepository.activateAccount(email);
-		return new ResponseEntity<>(true,HttpStatus.OK);
+		return new ResponseEntity<>("activated",HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -87,19 +90,23 @@ public class UserController {
 			throw new UserNotFoundException();
 		}
 		userRepository.deleteAccount(email);
-		return new ResponseEntity<>(true,HttpStatus.OK);
+		return new ResponseEntity<>("deleted",HttpStatus.OK);
 	}
 	@CrossOrigin
 	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestBody UserModel data) {
-		boolean flag=false;
-		 List<UserModel> users=userRepository.findByEmail(data.getEmail());
-		 if(users.size()>0) {
-			 if(users.get(0).getPassword().equals(data.getPassword()) && users.get(0).getActivated()) {
-				 flag=true;
-			 }
-		 }
-		 return new ResponseEntity<>(flag,HttpStatus.CREATED);
+	public ResponseEntity<?> loginUser(@RequestBody UserModel data) throws UserNotFoundException, UserNotActivatedException, IncorrectPasswordException {
+		List<UserModel> users=userRepository.findByEmail(data.getEmail());
+		if(users.isEmpty()) {
+			throw new UserNotFoundException();
+		}
+		UserModel user=users.get(0);
+		if(!user.getActivated()) {
+			throw new UserNotActivatedException();
+		}
+		if(!user.getPassword().equals(data.getPassword())) {
+			throw new IncorrectPasswordException();
+		}
+		return new ResponseEntity<>("logged in",HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -110,7 +117,7 @@ public class UserController {
 			throw new UserNotFoundException();
 		}
 		userRepository.updateAccount(data);
-		return new ResponseEntity<>(true,HttpStatus.OK);
+		return new ResponseEntity<>(data,HttpStatus.OK);
 	}
 	
 

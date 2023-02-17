@@ -7,12 +7,12 @@ import './Register.css';
 
 export default function Register() {
     const [input,setInput]=useState({
-        email:"",
-        password:"",
-        confirmPassword:"",
-        mobile:"",
-        username:"",
-        address:"",
+        email:null,
+        password:null,
+        confirmPassword:null,
+        mobile:null,
+        username:null,
+        address:null,
         role:"user",
         activated:false
     })

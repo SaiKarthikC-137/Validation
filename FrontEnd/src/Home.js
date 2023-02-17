@@ -18,7 +18,6 @@ export default function Home() {
     useEffect(() => {
     axios.get('http://localhost:8080/getuserbyemail',{params:{email:JSON.parse(localStorage.getItem("user"))['email']}})
       .then(res => {
-        console.log(res.data);
         setUser(res.data);
       })
       .catch(err => {

@@ -8,24 +8,9 @@ public class UserModel {
 	private String address;
 	private String email;
 	private String password;
-	private String role;
-	private Boolean activated;
+	private String role="user";
+	private Boolean activated=false;
 	
-	public UserModel() {
-	}
-
-	public UserModel(Integer userid, String username, String mobile, String address, String email, String password, String role,
-			Boolean activated) {
-		this.userid = userid;
-		this.username = username;
-		this.mobile = mobile;
-		this.address = address;
-		this.email = email;
-		this.password = password;
-		this.role=role;
-		this.activated = activated;
-	}
-
 	public String getRole() {
 		return role;
 	}
@@ -40,15 +25,6 @@ public class UserModel {
 
 	public void setUserid(Integer userid) {
 		this.userid = userid;
-	}
-
-	public UserModel(String username, String mobile, String address, String email, String password, Boolean activated) {
-		this.username = username;
-		this.mobile = mobile;
-		this.address = address;
-		this.email = email;
-		this.password = password;
-		this.activated = activated;
 	}
 
 	public String getUsername() {
