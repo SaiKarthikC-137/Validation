@@ -1,6 +1,8 @@
 package com.example.Validation.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,6 @@ import com.example.Validation.exceptions.IncorrectPasswordException;
 import com.example.Validation.exceptions.UserNotActivatedException;
 import com.example.Validation.exceptions.UserNotFoundException;
 import com.example.Validation.models.User;
-import com.example.Validation.repositories.UserRepository;
 import com.example.Validation.services.UserService;
 
 @RestController
@@ -43,15 +44,21 @@ public class UserController {
 			throw new DuplicateEmailException();
 		if(userService.findByUsername(data.getUsername())!=null)
 			throw new DuplicateUsernameException();
-		userService.saveUser(data);
-		return new ResponseEntity<>(data,HttpStatus.OK);
+		User user=userService.saveUser(data);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Registered the user "+data.getUsername());
+		response.put("user", user);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@CrossOrigin
 	@GetMapping("/findall")
 	public ResponseEntity<?> getAll() {
 		List<User> users=userService.findAll();
-		return new ResponseEntity<>(users,HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Fetched users");
+		response.put("users", users);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@CrossOrigin
 	@GetMapping("/getuserbyemail")
@@ -60,7 +67,10 @@ public class UserController {
 		if(user==null) {
 			throw new UserNotFoundException();
 		}
-		return new ResponseEntity<>(user,HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Fetched user with the email "+email);
+		response.put("user", user);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -70,7 +80,10 @@ public class UserController {
 		if(user==null) {
 			throw new UserNotFoundException();
 		}
-		return new ResponseEntity<>(user.getRole(),HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Fetched role of the user "+user.getUsername());
+		response.put("role", user.getRole());
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@CrossOrigin
 	@GetMapping("/activate")
@@ -81,7 +94,9 @@ public class UserController {
 		}
 		user.setActivated(true);
 		userService.saveUser(user);
-		return new ResponseEntity<>("activated",HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Activated the user "+user.getUsername());
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -92,7 +107,9 @@ public class UserController {
 			throw new UserNotFoundException();
 		}
 		userService.deleteByEmail(email);
-		return new ResponseEntity<>("deleted",HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Deleted the user "+user.getUsername());
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@CrossOrigin
 	@PostMapping("/login")
@@ -107,7 +124,9 @@ public class UserController {
 		if(!user.getPassword().equals(data.getPassword())) {
 			throw new IncorrectPasswordException();
 		}
-		return new ResponseEntity<>("logged in",HttpStatus.OK);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", user.getUsername()+" successfully logged in");
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -121,8 +140,11 @@ public class UserController {
 		data.setPassword(user.getPassword());
 		data.setRole(user.getRole());
 		data.setActivated(user.getActivated());
-		userService.saveUser(data);
-		return new ResponseEntity<>(data,HttpStatus.OK);
+		User updatedUser=userService.saveUser(data);
+		Map<String, Object> response=new HashMap<>();
+		response.put("message", "Updated the user "+user.getUsername());
+		response.put("user", updatedUser);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
 

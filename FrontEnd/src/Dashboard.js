@@ -8,7 +8,7 @@ function Dashboard() {
   useEffect(() => {
     axios.get('http://localhost:8080/findall')
       .then(res => {
-        setUsers(res.data);
+        setUsers(res.data.users);
       })
       .catch(err => {
         console.error(err);

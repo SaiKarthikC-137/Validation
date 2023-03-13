@@ -67,7 +67,7 @@ export default function Login() {
         .then(res=> {
             localStorage.setItem("user",JSON.stringify(input))
             axios.get('http://localhost:8080/getRole',{params: {email:input['email']}}).then(res=> {
-              if(res.data==="admin")
+              if(res.data.role==="admin")
                 navigate("/dashboard");
               else
                 navigate("/home");
@@ -75,8 +75,8 @@ export default function Login() {
               console.log(err);
             });
         }).catch(err=>{
-          console.log(err);
-          setStatus("Login Failed");
+          console.log(err.response.data.message);
+          setStatus(err.response.data.message);
         });
     }
     const handleRegister=(e)=> {

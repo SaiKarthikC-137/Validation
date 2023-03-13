@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.example.Validation.models.User;
 import com.example.Validation.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
