@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name="UserTable")
 public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer userid;
 	private String username;
 	private String mobile;
