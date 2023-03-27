@@ -84,5 +84,11 @@ public class User {
 	public void setActivated(Boolean activated) {
 		this.activated = activated;
 	}
+
+	@Override
+	public String toString() {
+		return "User [userid=" + userid + ", username=" + username + ", mobile=" + mobile + ", address=" + address
+				+ ", email=" + email + ", password=" + password + ", role=" + role + ", activated=" + activated + "]";
+	}
 	
 }

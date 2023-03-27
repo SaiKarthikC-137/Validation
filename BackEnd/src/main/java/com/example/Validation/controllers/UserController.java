@@ -20,6 +20,11 @@ import com.example.Validation.exceptions.DuplicateEmailException;
 import com.example.Validation.exceptions.DuplicateUsernameException;
 import com.example.Validation.exceptions.EmailValidationException;
 import com.example.Validation.exceptions.IncorrectPasswordException;
+import com.example.Validation.exceptions.MissingAddressException;
+import com.example.Validation.exceptions.MissingEmailException;
+import com.example.Validation.exceptions.MissingMobileException;
+import com.example.Validation.exceptions.MissingPasswordException;
+import com.example.Validation.exceptions.MissingUsernameException;
 import com.example.Validation.exceptions.UserNotActivatedException;
 import com.example.Validation.exceptions.UserNotFoundException;
 import com.example.Validation.models.User;
@@ -37,7 +42,22 @@ public class UserController {
 	}
 	@CrossOrigin
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody User data) throws EmailValidationException, DuplicateEmailException, DuplicateUsernameException{
+	public ResponseEntity<?> registerUser(@RequestBody User data) throws EmailValidationException, DuplicateEmailException, DuplicateUsernameException, MissingEmailException, MissingPasswordException, MissingUsernameException, MissingMobileException, MissingAddressException{
+		if(data.getEmail()==null) {
+			throw new MissingEmailException();
+		}
+		if(data.getPassword()==null) {
+			throw new MissingPasswordException();
+		}
+		if(data.getUsername()==null) {
+			throw new MissingUsernameException();
+		}
+		if(data.getMobile()==null) {
+			throw new MissingMobileException();
+		}
+		if(data.getAddress()==null) {
+			throw new MissingAddressException();
+		}
 		if(!validateEmail(data.getEmail()))
 			throw new EmailValidationException();
 		if(userService.findByEmail(data.getEmail()) != null)
@@ -113,16 +133,22 @@ public class UserController {
 	}
 	@CrossOrigin
 	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestBody User data) throws UserNotFoundException, UserNotActivatedException, IncorrectPasswordException {
+	public ResponseEntity<?> loginUser(@RequestBody User data) throws UserNotFoundException, UserNotActivatedException, IncorrectPasswordException, MissingEmailException, MissingPasswordException {
+		if(data.getEmail()==null) {
+			throw new MissingEmailException();
+		}
+		if(data.getPassword()==null) {
+			throw new MissingPasswordException();
+		}
 		User user=userService.findByEmail(data.getEmail());
 		if(user==null) {
 			throw new UserNotFoundException();
 		}
-		if(!user.getActivated()) {
-			throw new UserNotActivatedException();
-		}
 		if(!user.getPassword().equals(data.getPassword())) {
 			throw new IncorrectPasswordException();
+		}
+		if(!user.getActivated()) {
+			throw new UserNotActivatedException();
 		}
 		Map<String, Object> response=new HashMap<>();
 		response.put("message", user.getUsername()+" successfully logged in");
